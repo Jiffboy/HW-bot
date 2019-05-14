@@ -19,22 +19,28 @@ for entry in json:
 file = f=open("res/token.txt", "r")
 token = file.read()
 
+#get channel to send message to
+file = f=open("res/channel.txt", "r")
+channelid = file.read()
+channelid = int(channelid.strip())
+
 
 client = discord.Client()
 
 @client.event
 async def on_ready():
-    print('I have connected')
     guild = await client.fetch_guild(532437793805303808)
     channels = client.get_all_channels()
+
+    #go through all channels the bot has access to, find specified channel
     for channel in channels:
-        if channel.id == 577895915319459862:
+        if channel.id == channelid:
             message = ""
             for id in pingList:
                 user = await guild.fetch_member(id)
                 message += user.mention + " "
             await channel.send(message)
-            sys.exit()
+            await sys.exit()
         
 client.run(token.strip())
 
